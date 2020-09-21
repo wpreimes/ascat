@@ -30,9 +30,9 @@
 Reader for HSAF SMDAS SWI (ASCAT data assimilation product)
 """
 import os
-import sys
 
 #if sys.platform.lower() == 'win':
+#    import sys
 #    os.environ['ECCODES_DEFINITION_PATH'] = r"C:\Users\wpreimes\Anaconda3\envs\ascat\Library\share\eccodes\definitions"
 
 import numpy as np
@@ -235,7 +235,7 @@ class SMDAS_H14_Img(ImageBase):
 
     def _read_empty(self, timestamp, fill_value:float=9999.) -> (dict, dict):
         """ Create an empty image (all nans) """
-        
+
         if self.params is None:
             raise ValueError("No parameters defined to create empty image for.")
 
