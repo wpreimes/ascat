@@ -439,8 +439,6 @@ if __name__ == '__main__':
 #     img2 = img_reader.read(datetime(2016,1,6))
 
     path = r"R:\Projects\SMART-DRI\07_data\SMDAS2_H14\refurbished"
-    out_path = r"C:\Temp\smdas_Ts"
 
     ds = SMDAS_H14_Ds(path)
-    ds.reshuffle(out_path=out_path, startdate=datetime(2017, 8, 29),
-                 enddate=datetime(2017, 9, 2), imgbuffer=300)
+    ds.read(datetime)
