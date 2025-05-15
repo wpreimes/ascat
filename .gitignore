@@ -53,3 +53,4 @@ MANIFEST
 miniconda.sh
 /prof/
 /coverage.json
+.loc

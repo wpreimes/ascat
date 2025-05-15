@@ -658,7 +658,7 @@ class CellGridFiles():
 
         Parameters
         ----------
-        out_dir : str
+        out_dir : Path
             Output directory.
         func : callable
             Function to apply to each file.
