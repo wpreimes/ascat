@@ -2,6 +2,17 @@
 Changelog
 =========
 
+Version 2.5.3
+=============
+
+- Fix swath stacking bug (missing scaling)
+
+Version 2.5.2
+=============
+
+- Add ASCAT SSM ICDR (H130, H139) to product info
+- Code formatting
+
 Version 2.5.1
 =============
 
