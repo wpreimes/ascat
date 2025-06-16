@@ -158,7 +158,7 @@ class AscatSwathProduct(SwathProduct):
             sat_id = {"a": 3, "b": 4, "c": 5}
             sat = ds.attrs["spacecraft"][-1].lower()
             ds["sat_id"] = ("obs",
-                            np.repeat(sat_id[sat], ds["location_id"].size))
+                            np.repeat(np.int8(sat_id[sat]), ds["location_id"].size))
             del ds.attrs["spacecraft"]
         return ds
 
@@ -491,4 +491,6 @@ def get_swath_product_id(filename):
     for pattern, swath_product_id in swath_fname_regex_lookup.items():
         if re.match(pattern, filename):
             return swath_product_id
-    return None
+    raise ValueError(
+        f"Filename {filename} does not match any known swath product ID pattern."
+    )

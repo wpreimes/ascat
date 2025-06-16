@@ -33,8 +33,9 @@ import numpy as np
 import xarray as xr
 from pyresample import kd_tree, SwathDefinition
 
-from ascat.read_native.xarray_io import get_swath_product_id
-from ascat.read_native.xarray_io import swath_io_catalog
+from ascat.grids.grid_registry import GridRegistry
+from ascat.product_info import get_swath_product_id
+from ascat.product_info import swath_io_catalog
 from ascat.regrid.regrid import retrieve_or_store_grid_lut
 
 
@@ -64,6 +65,10 @@ def parse_args_swath_resample(args):
         metavar="RESAMPLE_DEG",
         type=float,
         help="Target grid spacing in degrees")
+    parser.add_argument(
+        "--product_id",
+        metavar="PRODUCT_ID",
+        help="Product identifier (e.g. H129, H125, H121, etc.). If not provided, an attempt is made to determine it from the file name.")
     parser.add_argument(
         "--grid_store",
         metavar="GRID_STORE",
@@ -101,6 +106,8 @@ def swath_resample_main(cli_args):
     """
     args = parse_args_swath_resample(cli_args)
 
+    product_id = args.product_id
+
     filepath = Path(args.filepath)
     trg_grid_size = args.resample_deg
 
@@ -122,7 +129,7 @@ def swath_resample_main(cli_args):
         grid_store = None
 
     inverse_distance_resampling(filepath, outpath, trg_grid_size, suffix, k,
-                                radius, grid_store)
+                                radius, grid_store, product_id=product_id)
 
 
 def inverse_distance_resampling(filepath,
@@ -131,7 +138,8 @@ def inverse_distance_resampling(filepath,
                                 suffix,
                                 k=6,
                                 radius=10000.,
-                                grid_store=None):
+                                grid_store=None,
+                                product_id=None):
     """
     Inverse distance resampling of ASCAT swath data.
 
@@ -151,6 +159,9 @@ def inverse_distance_resampling(filepath,
         Cut off distance in meters (default: 10000.)
     grid_store : pathlib.Path, optional
         Path for storing/loading lookup tables (default: None).
+    product_id : str, optional
+        Product identifier (e.g. H129, H125, H121, etc.). If not provided,
+        an attempt is made to determine it from the file name.
     """
     if filepath.is_dir():
         files = list(filepath.glob("**/*.nc"))
@@ -160,15 +171,13 @@ def inverse_distance_resampling(filepath,
         raise RuntimeError("No files found at the provided filepath")
 
     first_file = files[0]
-    product_id = get_swath_product_id(str(first_file.name))
+    product_id = product_id or get_swath_product_id(str(first_file.name))
 
+    registry = GridRegistry()
     product = swath_io_catalog[product_id]
-    src_grid = product.grid
-    src_grid_size = product.grid_sampling_km
+    src_grid = registry.get(product.grid_name)
+    src_grid_size = src_grid.res
     src_grid_id = f"fib_grid_{src_grid_size}km"
-
-    if product_id is None:
-        raise RuntimeError("Product identifier unknown")
 
     if (radius < 1000) or (radius > 100000):
         raise ValueError(f"Radius outside limits: 1000 < {radius} < 100000")
@@ -239,7 +248,7 @@ def inverse_distance_resampling(filepath,
 
             for var, method in var_list:
 
-                if var not in ds:
+                if var not in ds or len(ds[var].dims) == 0:
                     continue
 
                 data = ds[var].data[valid_input_index][index_array]

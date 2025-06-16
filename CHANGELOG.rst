@@ -2,6 +2,30 @@
 Changelog
 =========
 
+Version 2.6.1
+=============
+
+- Add new CLI argument "--sat" in the aggregation interface to allow users to filter METOP satellite data
+
+Version 2.6.0
+=============
+
+- Refactors the temporal aggregator to process and write each timestep
+  independently rather than loading and grouping the entire dataset at once
+- Add tqdm to dependencies
+
+Version 2.5.5
+=============
+
+- Introduces a --product_id CLI argument in both swath_regrid and swath_resample interfaces
+- Updates inverse_distance_resampling signature to accept product_id and attempts filename-based inference
+- Hooks the resampling step into the temporal aggregation flow with new --resample flags
+
+Version 2.5.4
+=============
+
+- Bugfix in SSM aggregation
+
 Version 2.5.3
 =============
 
