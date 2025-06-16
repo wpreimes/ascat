@@ -450,7 +450,6 @@ cell_io_catalog = {
     "H122": AscatH122Cell,
     "H121": AscatH121Cell,
     "H139": AscatH139Cell,
-    "H29": AscatH29Cell,
     "SIG0_6.25": AscatSIG0Cell6250m,
     "SIG0_12.5": AscatSIG0Cell12500m,
     "ERSH": ErsHCell,
@@ -464,7 +463,6 @@ swath_io_catalog = {
     "H122": AscatH122Swath,
     "H121": AscatH121Swath,
     "H139": AscatH139Swath,
-    "H29": AscatH29Swath,
     "SIG0_6.25": AscatSIG0Swath6250m,
     "SIG0_12.5": AscatSIG0Swath12500m,
 }
@@ -482,8 +480,6 @@ swath_fname_regex_lookup = {
         "H121",
     "W_IT-HSAF-ROME,SAT,SSM-ASCAT-METOP[ABC]-12.5km-H139_C_LIIB_.*_.*_.*____.nc":
         "H139",
-    "W_IT-HSAF-ROME,SAT,SSM-ASCAT-METOP[ABC]-12.5km-H29_C_LIIB_.*_.*_.*____.nc":
-        "H29",
     "W_IT-HSAF-ROME,SAT,SIG0-ASCAT-METOP[ABC]-6.25_C_LIIB_.*_.*_.*____.nc":
         "SIG0_6.25",
     "W_IT-HSAF-ROME,SAT,SIG0-ASCAT-METOP[ABC]-12.5_C_LIIB_.*_.*_.*____.nc":
